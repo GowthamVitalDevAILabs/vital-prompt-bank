@@ -4,10 +4,11 @@ import { useState, useMemo, useEffect } from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Search, Plus } from 'lucide-react';
+import { Search, Plus, Link } from 'lucide-react';
 import { usePrompts } from '@/hooks/usePrompts';
 import { PromptCard } from '@/components/PromptCard';
 import { ThemeToggle } from '@/components/ThemeToggle';
+import { Link as RouterLink } from 'react-router-dom';
 
 export default function PromptsPage() {
   const { data: prompts, isLoading, error, refetch } = usePrompts();
@@ -103,6 +104,12 @@ export default function PromptsPage() {
               <Plus className="mr-2 h-4 w-4" />
               New prompt
             </Button>
+            <RouterLink to="/links">
+              <Button variant="outline" size="sm">
+                <Link className="mr-2 h-4 w-4" />
+                LLM Links
+              </Button>
+            </RouterLink>
           </div>
           <ThemeToggle />
         </div>
