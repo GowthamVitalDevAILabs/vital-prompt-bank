@@ -4,41 +4,57 @@ import { useState, useMemo } from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Search, Plus, Link, FileText } from 'lucide-react';
+import { Search, Plus, Link, FileText, RefreshCw } from 'lucide-react';
 import { LlmLinkCard } from '@/components/LlmLinkCard';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { Link as RouterLink } from 'react-router-dom';
-import llmLinksData from '@/data/llmLinks.json';
-
-interface LlmLink {
-  id: string;
-  name: string;
-  isPopular: boolean;
-  model: string;
-  category: string;
-  description: string;
-  tags: string[];
-  url: string;
-}
+import { useLlmLinks } from '@/hooks/useLlmLinks';
+import { useToast } from "@/hooks/use-toast";
 
 export default function LlmLinksPage() {
+  const { data: links, isLoading, error, refetch } = useLlmLinks();
+  const { toast } = useToast();
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
 
+  const handleRefresh = async () => {
+    toast({ title: "Syncing with Notion...", description: "Fetching the latest links." });
+    
+    try {
+      const response = await fetch('http://localhost:3001/api/fetch-and-cache?type=llm_links');
+      const result = await response.json();
+      
+      if (!response.ok) throw new Error(result.error);
+      
+      await refetch();
+      
+      toast({ title: "Sync Complete!", description: result.message });
+    } catch (err) {
+      const isOffline = !navigator.onLine || err.message.includes('fetch');
+      toast({
+        variant: "destructive",
+        title: "Sync Failed",
+        description: isOffline ? "Please check your internet connection and try again." : err.message,
+      });
+    }
+  };
+
   // Extract unique categories from the data
   const categories = useMemo(() => {
+    if (!links) return [];
     const cats = new Set<string>();
-    llmLinksData.forEach(link => {
+    links.forEach(link => {
       if (link.category) {
         cats.add(link.category);
       }
     });
     return Array.from(cats).sort();
-  }, []);
+  }, [links]);
 
   // Filter links based on search and category
   const filteredLinks = useMemo(() => {
-    return llmLinksData.filter(link => {
+    if (!links) return [];
+    return links.filter(link => {
       const matchesSearch = searchTerm === '' || 
         link.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         link.model.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -50,20 +66,58 @@ export default function LlmLinksPage() {
       
       return matchesSearch && matchesCategory;
     });
-  }, [searchTerm, selectedCategory]);
+  }, [links, searchTerm, selectedCategory]);
 
   // Calculate statistics
   const stats = useMemo(() => {
-    const totalLinks = llmLinksData.length;
-    const uniqueCategories = new Set(llmLinksData.map(link => link.category)).size;
-    const popularCount = llmLinksData.filter(link => link.isPopular).length;
+    if (!links) return { total: 0, categories: 0, popular: 0 };
+    const totalLinks = links.length;
+    const uniqueCategories = new Set(links.map(link => link.category)).size;
+    const popularCount = links.filter(link => link.isPopular).length;
 
     return {
       total: totalLinks,
       categories: uniqueCategories,
       popular: popularCount
     };
-  }, []);
+  }, [links]);
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-background">
+        <div className="container mx-auto p-6">
+          <div className="flex items-center justify-center h-64">
+            <div className="flex items-center space-x-2">
+              <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary"></div>
+              <span>Loading links...</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-background">
+        <div className="container mx-auto p-6">
+          <Card className="max-w-md mx-auto">
+            <CardHeader>
+              <CardTitle className="text-destructive">Error Loading Links</CardTitle>
+              <CardDescription>
+                Failed to load links from the cache. Please try syncing with Notion.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Button onClick={handleRefresh} className="w-full">
+                Sync with Notion
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background">
@@ -83,6 +137,10 @@ export default function LlmLinksPage() {
                 Prompts
               </Button>
             </RouterLink>
+            <Button onClick={handleRefresh} variant="outline" size="sm">
+              <RefreshCw className="h-4 w-4 mr-2" />
+              Sync with Notion
+            </Button>
           </div>
           <ThemeToggle />
         </div>

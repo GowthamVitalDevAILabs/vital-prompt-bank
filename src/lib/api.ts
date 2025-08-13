@@ -2,9 +2,9 @@
 
 const API_BASE_URL = 'http://localhost:3001/api';
 
-export interface Prompt {
-  id: string;
-  [key: string]: any; // Dynamic properties from Notion
+export interface CacheResponse {
+  message: string;
+  error?: string;
 }
 
 export class ApiService {
@@ -37,11 +37,11 @@ export class ApiService {
     }
   }
 
-  static async getPrompts(): Promise<Prompt[]> {
+  static async fetchAndCache(type: 'prompts' | 'llm_links'): Promise<CacheResponse> {
     try {
-      return await this.request<Prompt[]>('/prompts');
+      return await this.request<CacheResponse>(`/fetch-and-cache?type=${type}`);
     } catch (error) {
-      console.error('getPrompts error:', error);
+      console.error('fetchAndCache error:', error);
       throw error;
     }
   }

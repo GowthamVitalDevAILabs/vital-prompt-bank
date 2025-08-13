@@ -4,16 +4,41 @@ import { useState, useMemo, useEffect } from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Search, Plus, Link } from 'lucide-react';
+import { Search, Plus, Link, RefreshCw } from 'lucide-react';
 import { usePrompts } from '@/hooks/usePrompts';
 import { PromptCard } from '@/components/PromptCard';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { Link as RouterLink } from 'react-router-dom';
+import { useToast } from "@/hooks/use-toast";
 
 export default function PromptsPage() {
   const { data: prompts, isLoading, error, refetch } = usePrompts();
+  const { toast } = useToast();
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
+
+  const handleRefresh = async () => {
+    toast({ title: "Syncing with Notion...", description: "Fetching the latest prompts." });
+    
+    try {
+      const response = await fetch('http://localhost:3001/api/fetch-and-cache?type=prompts');
+      const result = await response.json();
+      
+      if (!response.ok) throw new Error(result.error);
+      
+      // Refetch the data from the local JSON file
+      await refetch();
+      
+      toast({ title: "Sync Complete!", description: result.message });
+    } catch (err) {
+      const isOffline = !navigator.onLine || err.message.includes('fetch');
+      toast({
+        variant: "destructive",
+        title: "Sync Failed",
+        description: isOffline ? "Please check your internet connection and try again." : err.message,
+      });
+    }
+  };
 
   // Debug logging
   useEffect(() => {
@@ -110,6 +135,10 @@ export default function PromptsPage() {
                 LLM Links
               </Button>
             </RouterLink>
+            <Button onClick={handleRefresh} variant="outline" size="sm">
+              <RefreshCw className="h-4 w-4 mr-2" />
+              Sync with Notion
+            </Button>
           </div>
           <ThemeToggle />
         </div>

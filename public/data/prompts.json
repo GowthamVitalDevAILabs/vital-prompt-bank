@@ -1,0 +1,36 @@
+[
+  {
+    "id": "23e69b26-1dbf-80ea-8295-f7714fbb2499",
+    "Tags": [],
+    "Prompt": "text prompt text",
+    "Notes": "",
+    "Category": "Samole",
+    "Title": "text 1"
+  },
+  {
+    "id": "22d69b26-1dbf-80a0-b4f4-d3d6307d28c7",
+    "Tags": [],
+    "Prompt": "sample 2",
+    "Notes": "",
+    "Category": "QA",
+    "Title": "sample 3"
+  },
+  {
+    "id": "22d69b26-1dbf-80c0-82a5-ef1ca884417f",
+    "Tags": [],
+    "Prompt": "sample2",
+    "Notes": "",
+    "Category": "Samole",
+    "Title": "sample 2"
+  },
+  {
+    "id": "22d69b26-1dbf-8019-bbc1-ca751ba12282",
+    "Tags": [
+      "Test-Prompts"
+    ],
+    "Prompt": "Prompt sample here",
+    "Notes": "Test",
+    "Category": "NEW",
+    "Title": "Gowtham Sample Prompt"
+  }
+]

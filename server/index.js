@@ -4,6 +4,8 @@ const express = require('express');
 const { Client } = require('@notionhq/client');
 const cors = require('cors');
 const dotenv = require('dotenv');
+const fs = require('fs').promises;
+const path = require('path');
 
 dotenv.config();
 
@@ -13,38 +15,14 @@ const port = process.env.PORT || 3001;
 const notion = new Client({
   auth: process.env.NOTION_API_KEY,
 });
-const databaseId = process.env.NOTION_DATABASE_ID;
 
-app.use(cors());
-
-// Test endpoint to verify server is running
-app.get('/api/test', (req, res) => {
-  res.json({ 
-    message: 'Server is running!', 
-    timestamp: new Date().toISOString(),
-    env: {
-      hasApiKey: !!process.env.NOTION_API_KEY,
-      hasDatabaseId: !!process.env.NOTION_DATABASE_ID,
-      port: process.env.PORT || 3001
-    }
-  });
-});
-
-app.get('/api/prompts', async (req, res) => {
-  if (!databaseId) {
-    return res.status(500).json({ error: 'Notion Database ID is not configured.' });
-  }
-
-  try {
-    const response = await notion.databases.query({
-      database_id: databaseId,
-    });
-
-    const prompts = response.results.map(page => {
-      // Dynamically extract all properties
+// A map to associate a data 'type' with its Notion DB ID and property parser
+const notionDatabases = {
+  prompts: {
+    databaseId: process.env.NOTION_PROMPTS_DATABASE_ID,
+    parser: (page) => {
       const allProps = {};
       for (const [key, value] of Object.entries(page.properties)) {
-        // Handle different property types as needed
         if (value.type === 'title') {
           allProps[key] = value.title?.[0]?.plain_text || '';
         } else if (value.type === 'rich_text') {
@@ -70,23 +48,64 @@ app.get('/api/prompts', async (req, res) => {
           allProps[key] = value[value.type];
         }
       }
+      return { id: page.id, ...allProps };
+    }
+  },
+  llm_links: {
+    databaseId: process.env.NOTION_LINKS_DATABASE_ID,
+    parser: (page) => {
+      const props = page.properties;
       return {
         id: page.id,
-        ...allProps,
+        name: props.Name?.title?.[0]?.plain_text || '',
+        isPopular: props.isPopular?.checkbox || false,
+        model: props.Model?.rich_text?.[0]?.plain_text || '',
+        category: props.Category?.select?.name || '',
+        description: props.Description?.rich_text?.[0]?.plain_text || '',
+        tags: props.Tags?.multi_select?.map(tag => tag.name) || [],
+        url: props.URL?.url || ''
       };
-    });
+    }
+  }
+};
 
-    console.log('Prompts sent to frontend:', prompts);
+app.use(cors());
 
-    res.json(prompts);
+/**
+ * Generic endpoint to fetch data from a specified Notion DB,
+ * transform it, and cache it to a local JSON file.
+ */
+app.get('/api/fetch-and-cache', async (req, res) => {
+  const { type } = req.query; // 'prompts' or 'llm_links'
+
+  if (!type || !notionDatabases[type]) {
+    return res.status(400).json({ error: 'Invalid or missing data type specified.' });
+  }
+
+  const { databaseId, parser } = notionDatabases[type];
+  const cacheFileName = type === 'prompts' ? 'prompts.json' : 'llmLinks.json';
+  const cachePath = path.join(__dirname, '..', 'public', 'data', cacheFileName);
+
+  if (!databaseId) {
+    return res.status(500).json({ error: `Notion Database ID for '${type}' is not configured.` });
+  }
+
+  try {
+    console.log(`Fetching data for '${type}' from Notion...`);
+    const response = await notion.databases.query({ database_id: databaseId });
+    const data = response.results.map(parser);
+
+    console.log(`Writing ${data.length} items to cache file: ${cachePath}`);
+    await fs.writeFile(cachePath, JSON.stringify(data, null, 2));
+
+    res.json({ message: `Successfully fetched and cached ${data.length} items for '${type}'.` });
   } catch (error) {
-    console.error('Error fetching from Notion:', error);
-    res.status(500).json({ error: 'Failed to fetch data from Notion API.' });
+    console.error(`Error fetching from Notion for '${type}':`, error);
+    res.status(500).json({ error: `Failed to fetch data from Notion API for '${type}'.` });
   }
 });
 
 app.listen(port, () => {
   console.log(`✅ Server is running at http://localhost:${port}`);
-  console.log(`📝 Test endpoint: http://localhost:${port}/api/test`);
-  console.log(`🔗 Prompts endpoint: http://localhost:${port}/api/prompts`);
+  console.log(`🔄 Fetch and cache endpoint: http://localhost:${port}/api/fetch-and-cache`);
 }); 
