@@ -1,0 +1,62 @@
+[
+  {
+    "id": "1",
+    "name": "ChatGPT",
+    "isPopular": true,
+    "model": "GPT-4",
+    "category": "General AI",
+    "description": "OpenAI's powerful conversational AI model.",
+    "tags": ["OpenAI", "Conversational", "General"],
+    "url": "https://chat.openai.com/"
+  },
+  {
+    "id": "2",
+    "name": "Claude",
+    "isPopular": true,
+    "model": "Claude-3.5 Sonnet",
+    "category": "General AI",
+    "description": "Anthropic's helpful, harmless, and honest AI assistant.",
+    "tags": ["Anthropic", "Assistant", "Helpful"],
+    "url": "https://claude.ai/"
+  },
+  {
+    "id": "3",
+    "name": "Gemini",
+    "isPopular": false,
+    "model": "Gemini Pro",
+    "category": "General AI",
+    "description": "Google's multimodal AI model for various tasks.",
+    "tags": ["Google", "Multimodal", "Search"],
+    "url": "https://gemini.google.com/"
+  },
+  {
+    "id": "4",
+    "name": "Perplexity AI",
+    "isPopular": false,
+    "model": "Perplexity Pro",
+    "category": "Research",
+    "description": "AI-powered search and research assistant.",
+    "tags": ["Search", "Research", "Information"],
+    "url": "https://www.perplexity.ai/"
+  },
+  {
+    "id": "5",
+    "name": "Poe by Quora",
+    "isPopular": false,
+    "model": "Multiple Models",
+    "category": "Platform",
+    "description": "Access multiple AI models in one platform.",
+    "tags": ["Multiple", "Platform", "Quora"],
+    "url": "https://poe.com/"
+  },
+  {
+    "id": "6",
+    "name": "Character.AI",
+    "isPopular": false,
+    "model": "Character LLM",
+    "category": "Entertainment",
+    "description": "Create and chat with AI characters.",
+    "tags": ["Character", "Creative", "Roleplay"],
+    "url": "https://character.ai/"
+  }
+]

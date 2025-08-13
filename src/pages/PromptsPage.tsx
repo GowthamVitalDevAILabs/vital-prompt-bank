@@ -4,10 +4,11 @@ import { useState, useMemo, useEffect } from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Search, Plus, Sun, Hand } from 'lucide-react';
+import { Search, Plus, Link } from 'lucide-react';
 import { usePrompts } from '@/hooks/usePrompts';
 import { PromptCard } from '@/components/PromptCard';
+import { ThemeToggle } from '@/components/ThemeToggle';
+import { Link as RouterLink } from 'react-router-dom';
 
 export default function PromptsPage() {
   const { data: prompts, isLoading, error, refetch } = usePrompts();
@@ -54,35 +55,13 @@ export default function PromptsPage() {
     });
   }, [prompts, searchTerm, selectedCategory]);
 
-  // Calculate statistics
-  const stats = useMemo(() => {
-    if (!prompts) return { total: 0, categories: 0, usedToday: 0 };
-    
-    const uniqueCategories = new Set();
-    prompts.forEach(prompt => {
-      if (prompt.Category) uniqueCategories.add(prompt.Category);
-      if (prompt.Tags && Array.isArray(prompt.Tags)) {
-        prompt.Tags.forEach(tag => uniqueCategories.add(tag));
-      }
-    });
-
-    // Mock "used today" - you can replace this with actual usage tracking
-    const usedToday = Math.floor(Math.random() * 10) + 1;
-
-    return {
-      total: prompts.length,
-      categories: uniqueCategories.size,
-      usedToday
-    };
-  }, [prompts]);
-
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-background">
         <div className="container mx-auto p-6">
           <div className="flex items-center justify-center h-64">
             <div className="flex items-center space-x-2">
-              <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
+              <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary"></div>
               <span>Loading prompts...</span>
             </div>
           </div>
@@ -93,7 +72,7 @@ export default function PromptsPage() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-background">
         <div className="container mx-auto p-6">
           <Card className="max-w-md mx-auto">
             <CardHeader>
@@ -114,55 +93,39 @@ export default function PromptsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background">
       <div className="container mx-auto p-6 space-y-6">
         
-        {/* Header Bar */}
+        {/* New Page Header */}
         <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-2">
-            <Button variant="default" size="sm" className="bg-blue-600 hover:bg-blue-700">
-              <Sun className="h-4 w-4 mr-2" />
-              All Design
+          <div className="flex items-center gap-4">
+            <h2 className="text-2xl font-bold text-foreground">Vital</h2>
+            <Button size="sm">
+              <Plus className="mr-2 h-4 w-4" />
+              New prompt
             </Button>
-            <Button variant="ghost" size="sm">
-              <Hand className="h-4 w-4 mr-2" />
-              Si
-            </Button>
+            <RouterLink to="/links">
+              <Button variant="outline" size="sm">
+                <Link className="mr-2 h-4 w-4" />
+                LLM Links
+              </Button>
+            </RouterLink>
           </div>
+          <ThemeToggle />
         </div>
 
         {/* Search Bar */}
         <div className="relative">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
           <Input
             placeholder="Search by name, tag, or description..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-10 h-12 text-lg rounded-xl border-gray-200 focus:border-blue-500 focus:ring-blue-500"
+            className="pl-10 h-12 text-lg rounded-xl border-border bg-background focus:border-primary focus:ring-primary"
           />
         </div>
 
-        {/* Statistics Card */}
-        <Card className="bg-white rounded-xl shadow-sm border-gray-200">
-          <CardContent className="p-6">
-            <div className="grid grid-cols-3 gap-4">
-              <div className="text-center">
-                <div className="text-2xl font-bold text-gray-900">{stats.total}</div>
-                <div className="text-sm text-gray-600">Total Prompts</div>
-              </div>
-              <div className="text-center">
-                <div className="text-2xl font-bold text-gray-900">{stats.categories}</div>
-                <div className="text-sm text-gray-600">Categories</div>
-              </div>
-              <div className="text-center">
-                <div className="text-2xl font-bold text-gray-900">{stats.usedToday}</div>
-                <div className="text-sm text-gray-600">Used Today</div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Category Filters */}
+        {/* Collections Filter Buttons */}
         <div className="flex flex-wrap gap-2">
           <Button
             variant={selectedCategory === 'all' ? 'default' : 'outline'}
@@ -187,8 +150,8 @@ export default function PromptsPage() {
 
         {/* Debug Info */}
         {process.env.NODE_ENV === 'development' && (
-          <div className="bg-yellow-50 p-4 rounded-lg">
-            <p className="text-sm text-yellow-800">
+          <div className="bg-yellow-50 dark:bg-yellow-950 p-4 rounded-lg">
+            <p className="text-sm text-yellow-800 dark:text-yellow-200">
               Debug: {prompts?.length || 0} prompts loaded, {filteredPrompts.length} filtered
             </p>
           </div>
@@ -196,7 +159,7 @@ export default function PromptsPage() {
 
         {/* Prompts Grid */}
         {filteredPrompts.length === 0 ? (
-          <Card className="max-w-md mx-auto bg-white rounded-xl shadow-sm">
+          <Card className="max-w-md mx-auto bg-card">
             <CardHeader>
               <CardTitle>No prompts found</CardTitle>
               <CardDescription>
@@ -220,7 +183,7 @@ export default function PromptsPage() {
             </CardContent>
           </Card>
         ) : (
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {filteredPrompts.map((prompt) => (
               <PromptCard key={prompt.id} prompt={prompt} />
             ))}
@@ -230,7 +193,7 @@ export default function PromptsPage() {
         {/* Floating Action Button */}
         <Button
           size="lg"
-          className="fixed bottom-6 right-6 h-14 w-14 rounded-full bg-purple-600 hover:bg-purple-700 shadow-lg"
+          className="fixed bottom-6 right-6 h-14 w-14 rounded-full bg-primary hover:bg-primary/90 shadow-lg"
         >
           <Plus className="h-6 w-6" />
         </Button>
