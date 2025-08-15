@@ -52,14 +52,16 @@ export const LlmLinkCard = ({ link }: LlmLinkCardProps) => {
             </div>
           </div>
           
-          <Button
-            size="sm"
-            onClick={handleOpen}
-            className="bg-gradient-to-br from-primary to-primary/90 hover:from-primary/90 hover:to-primary text-primary-foreground shadow-sm"
-          >
-            <ExternalLink className="h-4 w-4 mr-2" />
-            Open
-          </Button>
+          {link.url && (
+            <Button
+              size="sm"
+              onClick={handleOpen}
+              className="bg-gradient-to-br from-primary to-primary/90 hover:from-primary/90 hover:to-primary text-primary-foreground shadow-sm"
+            >
+              <ExternalLink className="h-4 w-4 mr-2" />
+              Open
+            </Button>
+          )}
         </div>
       </CardHeader>
 

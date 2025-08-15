@@ -1,29 +1,38 @@
 [
   {
-    "id": "25069b26-1dbf-8001-a6ec-fbc38ea8fbb3",
+    "id": "25069b26-1dbf-800d-9d33-d7f3645ed582",
+    "category": [
+      "English Expert"
+    ],
+    "model": "Gemini",
+    "tags": [],
+    "Vital_Prompt_Bank DB": [
+      {
+        "id": "25069b26-1dbf-80b4-94ea-f3330c3cf19b"
+      }
+    ],
+    "description": "Improved Narration and speech  ",
+    "isPopular": true,
+    "url": "https://chatgpt.com/c/689f7867-3214-8321-873f-2cfb9e994c9e",
+    "name": "Speech Enhancer"
+  },
+  {
+    "id": "25069b26-1dbf-8054-8105-c27914f23731",
     "category": [
       "Formatters"
     ],
-    "model": "GPT",
-    "tags": [],
-    "description": "",
-    "isPopular": true,
-    "URL": "",
-    "name": "Test Alpha"
-  },
-  {
-    "id": "24e69b26-1dbf-8021-a95c-c681bcc086f8",
-    "category": [
-      "TSS-Study"
-    ],
-    "model": "Gemini-pro",
+    "model": "Gemini",
     "tags": [
-      "TSS",
-      "Search"
+      "Format"
     ],
-    "description": "sample description gsdfgsdfg sdfgjksfgh jksdfgsdgjlsdfl g dfg l dfgjklsdfj gklsjdfgkljdlsfgdlskfjg lsdjglsdglsdklg",
+    "Vital_Prompt_Bank DB": [
+      {
+        "id": "24f69b26-1dbf-80eb-aba3-ed36d1e691ef"
+      }
+    ],
+    "description": "Format Like Notion",
     "isPopular": true,
-    "URL": "https://chatgpt.com/c/68757694-d9e8-8007-8823-4a0d5c16d726",
-    "name": "sample"
+    "url": "https://gemini.google.com/u/0/app/38d433bae07e797e",
+    "name": "Text Formatter"
   }
 ]

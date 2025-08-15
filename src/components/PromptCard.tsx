@@ -52,21 +52,22 @@ export const PromptCard = ({ prompt }: PromptCardProps) => {
               <CardTitle className="text-lg font-bold text-foreground line-clamp-1 leading-tight">
                 {title}
               </CardTitle>
-              {isPopular && (
-                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-amber-50 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 text-xs font-medium">
-                  <Star className="h-3 w-3" />
-                  Popular
-                </span>
-              )}
+              
             </div>
             
-            {category && (
-              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              {category && (
                 <span className="inline-flex items-center gap-1 text-foreground/70">
                   {category}
                 </span>
-              </div>
-            )}
+              )}
+              {isPopular && (
+                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-amber-50 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 text-xs font-medium">
+                  <Star className="h-3 w-3" />
+                </span>
+              )}
+            </div>
+
           </div>
           
           <Button

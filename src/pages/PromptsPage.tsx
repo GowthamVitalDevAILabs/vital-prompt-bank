@@ -124,7 +124,7 @@ export default function PromptsPage() {
         {/* New Page Header */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <h2 className="text-2xl font-bold text-foreground">Vital</h2>
+            <h2 className="text-2xl font-bold text-foreground">Vital Dev</h2>
             <Button size="sm">
               <Plus className="mr-2 h-4 w-4" />
               New prompt
