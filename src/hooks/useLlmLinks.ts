@@ -18,7 +18,9 @@ const fetchLlmLinks = async (): Promise<LlmLink[]> => {
   if (!response.ok) {
     throw new Error('Network response was not ok');
   }
-  return response.json();
+  const data = await response.json();
+  console.log('Fetched LLM Links Data:', data);
+  return data;
 };
 
 export const useLlmLinks = () => {

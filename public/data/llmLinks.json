@@ -1,12 +1,29 @@
 [
   {
-    "id": "24e69b26-1dbf-8021-a95c-c681bcc086f8",
-    "name": "sample",
-    "isPopular": false,
-    "model": "",
-    "category": "",
-    "description": "",
+    "id": "25069b26-1dbf-8001-a6ec-fbc38ea8fbb3",
+    "category": [
+      "Formatters"
+    ],
+    "model": "GPT",
     "tags": [],
-    "url": "https://chatgpt.com/c/68757694-d9e8-8007-8823-4a0d5c16d726"
+    "description": "",
+    "isPopular": true,
+    "URL": "",
+    "name": "Test Alpha"
+  },
+  {
+    "id": "24e69b26-1dbf-8021-a95c-c681bcc086f8",
+    "category": [
+      "TSS-Study"
+    ],
+    "model": "Gemini-pro",
+    "tags": [
+      "TSS",
+      "Search"
+    ],
+    "description": "sample description gsdfgsdfg sdfgjksfgh jksdfgsdgjlsdfl g dfg l dfgjklsdfj gklsjdfgkljdlsfgdlskfjg lsdjglsdglsdklg",
+    "isPopular": true,
+    "URL": "https://chatgpt.com/c/68757694-d9e8-8007-8823-4a0d5c16d726",
+    "name": "sample"
   }
 ]

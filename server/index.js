@@ -48,23 +48,34 @@ const notionDatabases = {
           allProps[key] = value[value.type];
         }
       }
+      console.log('Parsed Prompt Props:', allProps);
       return { id: page.id, ...allProps };
     }
   },
   llm_links: {
     databaseId: process.env.NOTION_LINKS_DATABASE_ID,
     parser: (page) => {
-      const props = page.properties;
-      return {
-        id: page.id,
-        name: props.Name?.title?.[0]?.plain_text || '',
-        isPopular: props.isPopular?.checkbox || false,
-        model: props.Model?.rich_text?.[0]?.plain_text || '',
-        category: props.Category?.select?.name || '',
-        description: props.Description?.rich_text?.[0]?.plain_text || '',
-        tags: props.Tags?.multi_select?.map(tag => tag.name) || [],
-        url: props.URL?.url || ''
-      };
+      const allProps = {};
+      for (const [key, value] of Object.entries(page.properties)) {
+      console.log('Link Props:', value);
+        if (value.type === 'title') {
+          allProps[key] = value.title?.[0]?.plain_text || '';
+        } else if (value.type === 'rich_text') {
+          allProps[key] = value.rich_text?.[0]?.plain_text || '';
+        } else if (value.type === 'select') {
+          allProps[key] = value.select?.name || '';
+        } else if (value.type === 'multi_select') {
+          allProps[key] = value.multi_select?.map(tag => tag.name) || [];
+        } else if (value.type === 'checkbox') {
+          allProps[key] = value.checkbox;
+        } else if (value.type === 'url') {
+          allProps[key] = value.url || '';
+        } else {
+          allProps[key] = value[value.type];
+        }
+      }
+      console.log('Parsed LLM Link Props:', allProps);
+      return { id: page.id, ...allProps };
     }
   }
 };

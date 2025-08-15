@@ -55,9 +55,9 @@ export default function PromptsPage() {
       if (prompt.Category) {
         cats.add(prompt.Category);
       }
-      if (prompt.Tags && Array.isArray(prompt.Tags)) {
-        prompt.Tags.forEach(tag => cats.add(tag));
-      }
+      // if (prompt.Tags && Array.isArray(prompt.Tags)) {
+      //   prompt.Tags.forEach(tag => cats.add(tag));
+      // }
     });
     return Array.from(cats).sort();
   }, [prompts]);

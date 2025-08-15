@@ -1,36 +1,22 @@
 [
   {
-    "id": "23e69b26-1dbf-80ea-8295-f7714fbb2499",
-    "Tags": [],
-    "Prompt": "text prompt text",
-    "Notes": "",
-    "Category": "Samole",
-    "Title": "text 1"
-  },
-  {
-    "id": "22d69b26-1dbf-80a0-b4f4-d3d6307d28c7",
-    "Tags": [],
-    "Prompt": "sample 2",
-    "Notes": "",
-    "Category": "QA",
-    "Title": "sample 3"
-  },
-  {
-    "id": "22d69b26-1dbf-80c0-82a5-ef1ca884417f",
-    "Tags": [],
-    "Prompt": "sample2",
-    "Notes": "",
-    "Category": "Samole",
-    "Title": "sample 2"
-  },
-  {
-    "id": "22d69b26-1dbf-8019-bbc1-ca751ba12282",
+    "id": "24f69b26-1dbf-80eb-aba3-ed36d1e691ef",
     "Tags": [
-      "Test-Prompts"
+      "text format"
     ],
-    "Prompt": "Prompt sample here",
-    "Notes": "Test",
-    "Category": "NEW",
-    "Title": "Gowtham Sample Prompt"
+    "Prompt": "\nAgent Instructions: \"Clean & Format Without Changing Meaning\"",
+    "Notes": "",
+    "Category": "Formatter",
+    "Title": "Text Format →  Notion "
+  },
+  {
+    "id": "23e69b26-1dbf-80ea-8295-f7714fbb2499",
+    "Tags": [
+      "study notes"
+    ],
+    "Prompt": "I have attached my lecture documents.\nPlease:\nCarefully analyze the content and identify all key topics and subtopics covered in the lecture.\nList these topics clearly.\nFor each topic, create well-structured study notes using simple, easy-to-understand English.\nInclude real-life or practical examples wherever possible to help reinforce understanding.",
+    "Notes": "",
+    "Category": "Study Expert",
+    "Title": "Study Notes"
   }
 ]

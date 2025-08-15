@@ -44,7 +44,8 @@ export default function LlmLinksPage() {
     if (!links) return [];
     const cats = new Set<string>();
     links.forEach(link => {
-      if (link.category) {
+      console.log(link.category);
+      if (link.category && link.category.length > 0) {
         cats.add(link.category);
       }
     });
@@ -131,7 +132,7 @@ export default function LlmLinksPage() {
               <Plus className="mr-2 h-4 w-4" />
               New link
             </Button>
-            <RouterLink to="/prompts">
+            <RouterLink to="/">
               <Button variant="outline" size="sm">
                 <FileText className="mr-2 h-4 w-4" />
                 Prompts
@@ -163,7 +164,7 @@ export default function LlmLinksPage() {
         </div>
 
         {/* Statistics Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {/* <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <Card className="bg-card rounded-xl shadow-sm border-border">
             <CardContent className="p-6 text-center">
               <div className="text-2xl font-bold text-foreground">{stats.total}</div>
@@ -182,7 +183,7 @@ export default function LlmLinksPage() {
               <div className="text-sm text-muted-foreground">Popular</div>
             </CardContent>
           </Card>
-        </div>
+        </div> */}
 
         {/* Category Filter Buttons */}
         <div className="flex flex-wrap gap-2 justify-center">
