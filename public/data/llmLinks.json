@@ -1,0 +1,38 @@
+[
+  {
+    "id": "25069b26-1dbf-800d-9d33-d7f3645ed582",
+    "category": [
+      "English Expert"
+    ],
+    "model": "Gemini",
+    "tags": [],
+    "Vital_Prompt_Bank DB": [
+      {
+        "id": "25069b26-1dbf-80b4-94ea-f3330c3cf19b"
+      }
+    ],
+    "description": "Improved Narration and speech  ",
+    "isPopular": true,
+    "url": "https://chatgpt.com/c/689f7867-3214-8321-873f-2cfb9e994c9e",
+    "name": "Speech Enhancer"
+  },
+  {
+    "id": "25069b26-1dbf-8054-8105-c27914f23731",
+    "category": [
+      "Formatters"
+    ],
+    "model": "Gemini",
+    "tags": [
+      "Format"
+    ],
+    "Vital_Prompt_Bank DB": [
+      {
+        "id": "24f69b26-1dbf-80eb-aba3-ed36d1e691ef"
+      }
+    ],
+    "description": "Format Like Notion",
+    "isPopular": true,
+    "url": "https://gemini.google.com/u/0/app/38d433bae07e797e",
+    "name": "Text Formatter"
+  }
+]

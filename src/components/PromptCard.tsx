@@ -1,9 +1,9 @@
 // src/components/PromptCard.tsx
 
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Copy } from 'lucide-react';
+import { Copy, Star, ExternalLink } from 'lucide-react';
 import { Prompt } from '@/hooks/usePrompts';
 import { toast } from '@/hooks/use-toast';
 
@@ -36,59 +36,70 @@ export const PromptCard = ({ prompt }: PromptCardProps) => {
   if (prompt.Tags && Array.isArray(prompt.Tags)) {
     tags.push(...prompt.Tags);
   }
-  if (prompt.Category) {
-    tags.push(prompt.Category);
-  }
-
-  // Mock usage data (you can replace with real data)
-  const usageCount = Math.floor(Math.random() * 10) + 1;
 
   // Get title and description
   const title = prompt.Name || prompt.Title || 'Untitled Prompt';
   const description = prompt.Description || promptContent.substring(0, 100) + '...';
+  const isPopular = prompt.isPopular || false;
+  const category = prompt.Category || '';
 
   return (
-    <Card className="bg-card rounded-xl shadow-sm border-border hover:shadow-md transition-shadow">
-      <CardHeader className="pb-3">
-        <div className="flex items-start justify-between">
-          <CardTitle className="text-lg font-semibold text-card-foreground line-clamp-1 flex-1">
-            {title}
-          </CardTitle>
+    <Card className="bg-card rounded-xl shadow-sm border-border hover:shadow-md transition-all duration-200 hover:-translate-y-0.5">
+      <CardHeader className="pb-3 space-y-3">
+        <div className="flex items-start justify-between gap-4">
+          <div className="space-y-1.5">
+            <div className="flex items-center gap-2">
+              <CardTitle className="text-lg font-bold text-foreground line-clamp-1 leading-tight">
+                {title}
+              </CardTitle>
+              
+            </div>
+            
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              {category && (
+                <span className="inline-flex items-center gap-1 text-foreground/70">
+                  {category}
+                </span>
+              )}
+              {isPopular && (
+                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-amber-50 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 text-xs font-medium">
+                  <Star className="h-3 w-3" />
+                </span>
+              )}
+            </div>
+
+          </div>
+          
           <Button
             variant="ghost"
             size="sm"
             onClick={() => handleCopy(promptContent)}
-            className="ml-2 h-8 w-8 p-0 hover:bg-accent hover:text-accent-foreground"
+            className="text-muted-foreground hover:text-foreground"
           >
             <Copy className="h-4 w-4" />
           </Button>
         </div>
       </CardHeader>
-      
-      <CardContent className="pt-0 pb-3">
-        <CardDescription className="text-sm text-muted-foreground line-clamp-2">
-          {description}
-        </CardDescription>
-      </CardContent>
 
-      <CardFooter className="pt-0">
-        <div className="flex flex-wrap gap-1 w-full">
-          {tags.slice(0, 3).map((tag: string, index: number) => (
-            <Badge 
-              key={index} 
-              variant="secondary" 
-              className="text-xs px-2 py-1 rounded-full bg-primary/10 text-primary hover:bg-primary/20"
-            >
-              {tag}
-            </Badge>
-          ))}
-          {tags.length > 3 && (
-            <Badge variant="secondary" className="text-xs px-2 py-1 rounded-full">
-              +{tags.length - 3}
-            </Badge>
-          )}
-        </div>
-      </CardFooter>
+      <CardContent className="space-y-3 pt-0 pb-4 px-6">
+        <p className="text-sm text-muted-foreground leading-relaxed line-clamp-3">
+          {description}
+        </p>
+
+        {tags.length > 0 && (
+          <div className="flex flex-wrap gap-2 pt-1">
+            {tags.map((tag: string, index: number) => (
+              <Badge
+                key={index}
+                variant="secondary"
+                className="text-xs px-2.5 py-1 rounded-md bg-muted/50 hover:bg-muted transition-colors"
+              >
+                {tag}
+              </Badge>
+            ))}
+          </div>
+        )}
+      </CardContent>
     </Card>
   );
-}; 
+};
