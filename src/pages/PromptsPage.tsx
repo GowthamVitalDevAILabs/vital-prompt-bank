@@ -4,11 +4,10 @@ import { useState, useMemo, useEffect } from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Search, Plus, Link, RefreshCw } from 'lucide-react';
+import { Search, Plus, RefreshCw } from 'lucide-react';
 import { usePrompts } from '@/hooks/usePrompts';
 import { PromptCard } from '@/components/PromptCard';
 import { ThemeToggle } from '@/components/ThemeToggle';
-import { Link as RouterLink } from 'react-router-dom';
 import { useToast } from "@/hooks/use-toast";
 
 export default function PromptsPage() {
@@ -129,12 +128,7 @@ export default function PromptsPage() {
               <Plus className="mr-2 h-4 w-4" />
               New prompt
             </Button>
-            <RouterLink to="/links">
-              <Button variant="outline" size="sm">
-                <Link className="mr-2 h-4 w-4" />
-                LLM Links
-              </Button>
-            </RouterLink>
+
             <Button onClick={handleRefresh} variant="outline" size="sm">
               <RefreshCw className="h-4 w-4 mr-2" />
               Sync with Notion

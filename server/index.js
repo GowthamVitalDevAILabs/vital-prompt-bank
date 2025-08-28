@@ -51,32 +51,6 @@ const notionDatabases = {
       console.log('Parsed Prompt Props:', allProps);
       return { id: page.id, ...allProps };
     }
-  },
-  llm_links: {
-    databaseId: process.env.NOTION_LINKS_DATABASE_ID,
-    parser: (page) => {
-      const allProps = {};
-      for (const [key, value] of Object.entries(page.properties)) {
-      console.log('Link Props:', value);
-        if (value.type === 'title') {
-          allProps[key] = value.title?.[0]?.plain_text || '';
-        } else if (value.type === 'rich_text') {
-          allProps[key] = value.rich_text?.[0]?.plain_text || '';
-        } else if (value.type === 'select') {
-          allProps[key] = value.select?.name || '';
-        } else if (value.type === 'multi_select') {
-          allProps[key] = value.multi_select?.map(tag => tag.name) || [];
-        } else if (value.type === 'checkbox') {
-          allProps[key] = value.checkbox;
-        } else if (value.type === 'url') {
-          allProps[key] = value.url || '';
-        } else {
-          allProps[key] = value[value.type];
-        }
-      }
-      console.log('Parsed LLM Link Props:', allProps);
-      return { id: page.id, ...allProps };
-    }
   }
 };
 
@@ -87,14 +61,14 @@ app.use(cors());
  * transform it, and cache it to a local JSON file.
  */
 app.get('/api/fetch-and-cache', async (req, res) => {
-  const { type } = req.query; // 'prompts' or 'llm_links'
+  const { type } = req.query; // 'prompts'
 
   if (!type || !notionDatabases[type]) {
     return res.status(400).json({ error: 'Invalid or missing data type specified.' });
   }
 
   const { databaseId, parser } = notionDatabases[type];
-  const cacheFileName = type === 'prompts' ? 'prompts.json' : 'llmLinks.json';
+  const cacheFileName = 'prompts.json';
   const cachePath = path.join(__dirname, '..', 'public', 'data', cacheFileName);
 
   if (!databaseId) {
@@ -117,6 +91,6 @@ app.get('/api/fetch-and-cache', async (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log(`✅ Server is running at http://localhost:${port}`);
+  console.log(`✅ Vital Prompt Forge Server is running at http://localhost:${port}`);
   console.log(`🔄 Fetch and cache endpoint: http://localhost:${port}/api/fetch-and-cache`);
 }); 
